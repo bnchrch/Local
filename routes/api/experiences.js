@@ -1,317 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
-//var knex = require('knex')({
-//    client: 'pg',
-//    connection: {
-//        host     : '127.0.0.1',
-//        user     : '',
-//        password : '',
-//        database : 'mydb'
-//    }
-//});
-
-var experiences = {
-    "listings":5,
-    "page":
-    {
-        "current":1,
-        "total":1
-    },
-    "results":
-        [
-            {
-                "id":1,
-                "title":"Banff Lake Cruise",
-                "price":65.00,
-                "rate":"per person",
-                "user": {
-                    "username": "Brewster Travel",
-                    "email": "email@email.ca",
-                    "phone_number": "1112223333"
-                },
-                "tile_image":"http://www.imgur.com/3424sad.jpg",
-                "distance":3.4,
-                "rating":0.87,
-                "num_reviews":23
-            },
-            {
-                "id":2,
-                "title":"Holi Festival Tour",
-                "price":28.00,
-                "rate":"per person",
-                "user": {
-                    "username": "Kiera David",
-                    "email": "email@email.ca",
-                    "phone_number": "1112223333"
-                },
-                "tile_image":"http://www.imgur.com/3424sad.jpg",
-                "distance":5.41,
-                "rating":0.91,
-                "num_reviews":14
-            },
-            {
-                "id":3,
-                "title":"White Water Rafing",
-                "price":75.00,
-                "rate":"per person",
-                "user": {
-                    "username": "Maverick Tours",
-                    "email": "email@email.ca",
-                    "phone_number": "1112223333"
-                },
-                "tile_image":"http://www.imgur.com/3424sad.jpg",
-                "distance":10,
-                "rating":0.87,
-                "num_reviews":8
-            },
-            {
-                "id":4,
-                "title":"Paris Photography Tour",
-                "price":25.00,
-                "rate":"per person",
-                "user": {
-                    "username": "John French",
-                    "email": "email@email.ca",
-                    "phone_number": "1112223333"
-                },
-                "tile_image":"http://www.imgur.com/3424sad.jpg",
-                "distance":0.86,
-                "rating":0.78,
-                "num_reviews":7
-            },
-            {
-                "id":5,
-                "title":"Group Ski Lessons",
-                "price":125.00,
-                "rate":"per day",
-                "user": {
-                    "username": "Sunshine Ski School",
-                    "email": "email@email.ca",
-                    "phone_number": "1112223333"
-                },
-                "tile_image":"http://www.imgur.com/3424sad.jpg",
-                "distance":12.86,
-                "rating":0.72,
-                "num_reviews":88
-            }
-        ]
-};
-
-var individual_experience = {
-        "results": [
-            {
-                "id":1,
-                "title":"Banff Lake Cruise",
-                "price":65.00,
-                "rate":"per person",
-                "user": {
-                    "username": "Brewster Travel",
-                    "email": "email@email.ca",
-                    "phone_number": "1112223333"
-                },
-                "images":
-                    [
-                        "http://www.imgur.com/3424sad.jpg",
-                        "http://www.imgur.com/3424sad.jpg",
-                        "http://www.imgur.com/3424sad.jpg"
-                    ],
-                "distance":3.4,
-                "rating":0.87,
-                "num_reviews":23,
-                "reviews":
-                    [
-                        {
-                            "name": "Jerry",
-                            "time": "2014-01-10",
-                            "profile_picture":"http://www.imgur.com/123213asd.jpg",
-                            "uid": 23453,
-                            "rating": 1,
-                            "review": "Great experience would do again"
-                        },
-                        {
-                            "name": "Cairie",
-                            "time": "2014-01-10",
-                            "uid": 23453,
-                            "rating": 0.84,
-                            "review": "Was the time of my entire trip but i forgot my rain jacket LOL"
-                        },
-                        {
-                            "name": "Marry",
-                            "time": "2014-01-10",
-                            "uid": 23453,
-                            "rating": 0.56,
-                            "review": "bahumbug"
-                        }
-
-                    ],
-                "description": "This is the description"
-
-            },
-            {
-                "id":2,
-                "title":"Holi Festival Tour",
-                "price":28.00,
-                "rate":"per person",
-                "user": {
-                    "username": "Kiera David",
-                    "email": "email@email.ca",
-                    "phone_number": "1112223333"
-                },
-                "images":
-                    [
-                        "http://www.imgur.com/3424sad.jpg",
-                        "http://www.imgur.com/3424sad.jpg",
-                        "http://www.imgur.com/3424sad.jpg"
-                    ],
-                "distance":5.41,
-                "rating":0.91,
-                "num_reviews":14
-            },
-            {
-                "id":3,
-                "title":"White Water Rafing",
-                "price":75.00,
-                "rate":"per person",
-                "user": {
-                    "username": "Maverick Tours",
-                    "email": "email@email.ca",
-                    "phone_number": "1112223333"
-                },
-                "images":
-                    [
-                        "http://www.imgur.com/3424sad.jpg",
-                        "http://www.imgur.com/3424sad.jpg",
-                        "http://www.imgur.com/3424sad.jpg"
-                    ],
-                "distance":10,
-                "rating":0.87,
-                "num_reviews":8,
-                "reviews":
-                    [
-                        {
-                            "name": "Jerry",
-                            "time": "2014-01-10",
-                            "profile_picture":"http://www.imgur.com/123213asd.jpg",
-                            "uid": 23453,
-                            "rating": 1,
-                            "review": "Great experience would do again"
-                        },
-                        {
-                            "name": "Cairie",
-                            "time": "2014-01-10",
-                            "uid": 23453,
-                            "rating": 0.84,
-                            "review": "Was the time of my entire trip but i forgot my rain jacket LOL"
-                        },
-                        {
-                            "name": "Marry",
-                            "time": "2014-01-10",
-                            "uid": 23453,
-                            "rating": 0.56,
-                            "review": "bahumbug"
-                        }
-
-                    ],
-                "description": "This is the description"
-            },
-            {
-                "id":4,
-                "title":"Paris Photography Tour",
-                "price":25.00,
-                "rate":"per person",
-                "user": {
-                    "username": "John French",
-                    "email": "email@email.ca",
-                    "phone_number": "1112223333"
-                },
-                "images":
-                    [
-                        "http://www.imgur.com/3424sad.jpg",
-                        "http://www.imgur.com/3424sad.jpg",
-                        "http://www.imgur.com/3424sad.jpg"
-                    ],
-                "distance":0.86,
-                "rating":0.78,
-                "num_reviews":7,
-                "reviews":
-                    [
-                        {
-                            "name": "Jerry",
-                            "time": "2014-01-10",
-                            "profile_picture":"http://www.imgur.com/123213asd.jpg",
-                            "uid": 23453,
-                            "rating": 1,
-                            "review": "Great experience would do again"
-                        },
-                        {
-                            "name": "Cairie",
-                            "time": "2014-01-10",
-                            "uid": 23453,
-                            "rating": 0.84,
-                            "review": "Was the time of my entire trip but i forgot my rain jacket LOL"
-                        },
-                        {
-                            "name": "Marry",
-                            "time": "2014-01-10",
-                            "uid": 23453,
-                            "rating": 0.56,
-                            "review": "bahumbug"
-                        }
-
-                    ],
-                "description": "This is the description"
-            },
-            {
-                "id":5,
-                "title":"Group Ski Lessons",
-                "price":125.00,
-                "rate":"per day",
-                "user": {
-                    "username": "Sunshine Ski School",
-                    "email": "email@email.ca",
-                    "phone_number": "1112223333"
-                },
-                "images":
-                    [
-                        "http://www.imgur.com/3424sad.jpg",
-                        "http://www.imgur.com/3424sad.jpg",
-                        "http://www.imgur.com/3424sad.jpg"
-                    ],
-                "distance":12.86,
-                "rating":0.72,
-                "num_reviews":88,
-                "reviews":
-                    [
-                        {
-                            "name": "Jerry",
-                            "time": "2014-01-10",
-                            "profile_picture":"http://www.imgur.com/123213asd.jpg",
-                            "uid": 23453,
-                            "rating": 1,
-                            "review": "Great experience would do again"
-                        },
-                        {
-                            "name": "Cairie",
-                            "time": "2014-01-10",
-                            "uid": 23453,
-                            "rating": 0.84,
-                            "review": "Was the time of my entire trip but i forgot my rain jacket LOL"
-                        },
-                        {
-                            "name": "Marry",
-                            "time": "2014-01-10",
-                            "uid": 23453,
-                            "rating": 0.56,
-                            "review": "bahumbug"
-                        }
-
-                    ],
-                "description": "This is the description"
-            }
-        ]
-};
-
+var db = require('../../models');
 
 /* GET users listing. */
 router.get('/', function(req, res) {
@@ -337,20 +26,111 @@ router.get('/', function(req, res) {
         res.send ("need a lng coord");
     }
     else {
-        //when we have params return response
-        res.send(experiences);
+        db
+            .Experience
+            .findAll()
+            .complete(function(err, experiences) {
+                if(!!err) {
+                    console.log("An error occurred retrieving users:", err);
+                    res.send("An error occurred retrieving users");
+                } else if (!experiences) {
+                    console.log("no experiences found");
+                    res.send("no no experiences found");
+                } else {
+                    res.json(experiences);
+                }
+            })
 
-    };
+    }
 
 
 
 });
 
 router.get('/:id', function(req, res) {
-    var id = req.params.id;
-    return_experience = individual_experience.results[id-1];
-    if (!return_experience) res.send("could not find experience")
-    else res.send(return_experience);
+    db.Experience
+        .find({ where: { id: req.params.id } })
+        .complete(function(err, experience) {
+            if (!!err) {
+                console.log('An error occurred while searching for experience:', err)
+            } else if (!experience) {
+                console.log('No experience with the id has been found.')
+            } else {
+                res.json(experience.values);
+            }
+        })
 });
+
+router.post('/', function(req, res) {
+    var username = req.body.username;
+    var password = req.body.password;
+
+    var title = req.body.title;
+    var price = req.body.price;
+    var rate = req.body.rate;
+    var description = req.body.description;
+    var email = req.body.email;
+    var phone_number = req.body.phone_number;
+
+
+    if(!username || !password || !title || !price || !rate || !description || !email || !phone_number){
+        res.send("missing parameters!\n");
+    }
+//    else if (rate !== 'hour'
+//        || rate != 'day'
+//        ||  rate != 'week'
+//        ||  rate != 'month' ) {
+//        res.send('Your rate must be per hour, day, week, or month');
+//
+//    }
+    else{
+
+        db.
+            User
+            .find({ where: { username: username, password:password } })
+            .complete(function(err, user) {
+                if (!!err) {
+                    console.log('An error occurred while searching user:', err)
+                } else if (!user) {
+                    console.log('No user with those credentials exist')
+                } else {
+                    // credentials given match
+                    var experience = db.Experience.build({
+                        title: title,
+                        price: price,
+                        rate: rate,
+                        description: description,
+                        email: email,
+                        phone_number: phone_number
+                    });
+                    experience
+                        .save()
+                        .complete(function(err, experience) {
+                            if (!!err) {
+                                console.log('The instance has not been saved:', err);
+                                res.send(500);
+                            } else {
+                                console.log('We have a persisted instance now');
+                                experience
+                                    .setUser(user)
+                                    .complete(function(err){
+                                       if(!!err){
+                                           console.log("failed to associate experience with user");
+                                       } else {
+                                           console.log("associated successfully!")
+                                       }
+                                    });
+                                res.send(200)
+                            }
+                        });
+                }
+            })
+
+
+
+    }
+
+});
+
 
 module.exports = router;

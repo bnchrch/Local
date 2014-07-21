@@ -7,9 +7,7 @@ var router = express.Router();
 //});
 
 router.get('/', function(req, res) {
-    res.send({
-         trips: ["moped, ski, bike, boat"]
-        });
+    res.send("Welcome to Local! we are still constructing the web page")
 });
 
 module.exports = router;
