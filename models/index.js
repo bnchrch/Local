@@ -2,7 +2,7 @@ var fs        = require('fs')
     , path      = require('path')
     , Sequelize = require('sequelize')
     , lodash    = require('lodash')
-    , sequelize = new Sequelize('localappdb', '', '', {
+    , sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PWD, {
         dialect: "postgres", // or 'sqlite', 'postgres', 'mariadb'
         port:    5432 // or 5432 (for postgres)
     })
