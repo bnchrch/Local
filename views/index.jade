@@ -3,3 +3,10 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
+  form(method="post", enctype="multipart/form-data", action="/api/experiences/upload_images")
+      input(type="text", name="username")
+      input(type="password", name="password")
+      input(type="file", name="thumbnail")
+      input(type="submit")
+
+

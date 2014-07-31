@@ -5,11 +5,23 @@ module.exports = function(sequelize, DataTypes) {
         rate: DataTypes.STRING,
         description: DataTypes.STRING,
         email: DataTypes.STRING,
-        phone_number: DataTypes.STRING
+        phone_number: DataTypes.STRING,
+        image: DataTypes.STRING,
+        latitude: DataTypes.FLOAT,
+        longitude: DataTypes.FLOAT
     }, {
         classMethods: {
             associate: function(models) {
                 Experience.belongsTo(models.User)
+            }
+
+        },
+        instanceMethods: {
+            hasUser: function(user) {
+                if (user.id === this.userId) {
+                    return true;
+                }
+                else return false
             }
         },
         tableName: 'experiences'

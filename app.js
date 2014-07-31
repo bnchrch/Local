@@ -4,11 +4,13 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var multer = require('multer');
 
 var routes = require('./routes/index');
 var api_users = require('./routes/api/users');
 var api_experiences = require('./routes/api/experiences');
 
+var crypto = require('crypto');
 
 console.log("server is now running");
 var app = express();
@@ -23,6 +25,25 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
+
+
+function randomValueHex (len) {
+    return crypto.randomBytes(Math.ceil(len/2))
+        .toString('hex') // convert to hexadecimal format
+        .slice(0,len);   // return required number of characters
+}
+
+app.use(multer({
+    dest:'./public/images',
+    onFileUploadStart: function (file) {
+        if (file.mimetype != 'image/png' && file.mimetype != 'image/jpeg') return false;
+    },
+    rename: function (fieldname, filename) {
+        return randomValueHex(8) + Date.now()
+    }
+}));
+
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 //routes

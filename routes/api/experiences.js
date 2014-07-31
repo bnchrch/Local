@@ -1,21 +1,33 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../../models');
+var fs = require('fs');
+var math  = require('mathjs');
+
+function getLngRange () {
+
+};
+
+function getLatRange () {
+
+};
+
+
 
 /* GET users listing. */
 router.get('/', function(req, res) {
     //insert stuff for high level experience
-    radius = req.query.radius;
-    console.log(radius);
+    var distance = req.query.distance;
+    console.log(distance);
 
-    lat = req.query.lat;
+    var lat = req.query.lat;
     console.log(lat);
 
-    lng = req.query.lng;
+    var lng = req.query.lng;
     console.log(lng);
 
-    if (!radius) {
-        res.send ("need a radius");
+    if (!distance) {
+        res.send ("need a distance");
     }
 
     else if (!lat) {
@@ -26,21 +38,106 @@ router.get('/', function(req, res) {
         res.send ("need a lng coord");
     }
     else {
-        db
-            .Experience
-            .findAll()
-            .complete(function(err, experiences) {
-                if(!!err) {
-                    console.log("An error occurred retrieving users:", err);
-                    res.send("An error occurred retrieving users");
-                } else if (!experiences) {
-                    console.log("no experiences found");
-                    res.send("no no experiences found");
-                } else {
-                    res.json(experiences);
-                }
-            })
+        /*calc range
+         http://janmatuschek.de/LatitudeLongitudeBoundingCoordinates
+        we need to:
+        1. convert the radius given from km to lat degrees
+        2. convert the radius given to lng degrees
+        3. calculate lng-radius.lng, lng+radius.lng
+        4. calculate lat-radius.lat, lat+radius.lat
+        5. find all experiences in range
+         */
 
+        //1. convert radius into lat degrees
+        var great_circle_distance = 6371; //km
+        var angular_radius = distance/great_circle_distance;
+
+        //TODO: account for if a pole is in the query later
+        var lat_min = lat - angular_radius;
+        var lat_max = lat + angular_radius;
+
+        var delta_lng = math.asin(math.sin(angular_radius)/math.cos(lat));
+        var lng_min = lng - delta_lng;
+        var lng_max = lng + delta_lng;
+
+        //dealing with poles and the 180th meridian
+
+        //north pole in query
+        if (lat_max > (math.pi/2)){
+            lng_min = -math.pi;
+            lat_max = math.pi/2;
+            lng_max = math.pi;
+        }
+
+        //south pole in query
+        if (lat_min < (-math.pi/2)) {
+            lat_min = -math.pi/2;
+            lng_min = -math.pi;
+            lng_max = math.pi;
+        }
+
+        //180th meridian
+        if (lng_min < -math.pi || lng_max > math.pi){
+            lng_min = -math.pi;
+            lng_max = math.pi;
+
+        }
+
+        var sql_query = "SELECT * FROM experiences WHERE (latitude >= "
+            + lat_min
+            +  " AND latitude <= "
+            + lat_max
+            + ") AND (longitude >= "
+            + lng_min
+            + " AND longitude <= " +
+            + lng_max
+            + ") HAVING acos(sin(" + lat + ") * sin(latitude) + cos(" + lat + ") * cos(latitude) * cos(longitude - (" + lng + "))) <= " + angular_radius;
+        db
+            .query(sql_query)
+            .success(function (err, local_experiences){
+                if (!!err) {
+                    console.log(err);
+                    res.send(500);
+                }
+                else {
+                    res.json(local_experiences);
+                }
+            });
+//        db
+//            .Experience
+//            .find({
+//                where: {
+//                    latitude: {
+//                        gte: lat_min,
+//                        lte: lat_max
+//                    },
+//                    longitude:{
+//                        gte: lng_min,
+//                        lte: lng_max
+//                    },
+//
+//
+//                    math.acos(
+//                        math.sin(lat)
+//                        * math.sin(latitude)
+//                            +  math.cos(lat)
+//                            * math.cos(latitude)
+//                            *  math.cos(longitutde - lng))
+//                    <= angular_radius
+//                }
+//            })
+//            .complete(function(err, experiences) {
+//                if(!!err) {
+//                    console.log("An error occurred retrieving users:", err);
+//                    res.send("An error occurred retrieving users");
+//                } else if (!experiences) {
+//                    console.log("no experiences found");
+//                    res.send("no experiences found");
+//                } else {
+//                    res.json(experiences);
+//                }
+//            })
+//
     }
 
 
@@ -85,8 +182,8 @@ router.post('/', function(req, res) {
 //    }
     else{
 
-        db.
-            User
+        db
+            .User
             .find({ where: { username: username, password:password } })
             .complete(function(err, user) {
                 if (!!err) {
@@ -101,7 +198,8 @@ router.post('/', function(req, res) {
                         rate: rate,
                         description: description,
                         email: email,
-                        phone_number: phone_number
+                        phone_number: phone_number,
+                        image: ''
                     });
                     experience
                         .save()
@@ -132,5 +230,83 @@ router.post('/', function(req, res) {
 
 });
 
+router.post('/:id/upload_images', function(req, res) {
 
+    /*
+     1. check if it is an image (done in the app.js use call)
+     2. check for appropriate credentials
+     3. check for experience with id
+     4. upload image
+     5. on success write image location to experience
+     */
+    var username = req.body.username;
+    var password = req.body.password;
+    var experience_id = req.params.id;
+    var image_path = req.files.image.path;
+    console.log('username: ' + username + ' password: ' + password + ' id: ' + experience_id);
+    console.log(req.files);
+    console.log(image_path);
+    //2. check credentials
+
+    db
+        .User
+        .find({ where: { username: username, password: password } })
+        .complete(function (err, user) {
+            if (!!err) {
+                console.log('An error occurred while searching user:', err);
+                imageUploadFailed(res, 'An error occurred while searching user:', image_path);
+            } else if (!user) {
+                console.log('No user with those credentials exist');
+                imageUploadFailed(res, 'No user with those credentials exist', image_path);            }
+            else {
+                db
+                    .Experience
+                    .find({ where: { id: experience_id}})
+                    .complete(function (err, experience) {
+                        if (!!err) {
+                            console.log('An error occurred while searching experience:', err);
+                            imageUploadFailed(res, 'An error occurred while searching experience:', image_path);
+                        } else if (!experience) {
+                            console.log('No experience matches the id');
+                            imageUploadFailed(res, 'No experience matches the id', image_path);                        }
+                        else {
+                            if (!experience.hasUser(user)) {
+                                imageUploadFailed(res, 'user does not own this experience', image_path)
+                            }
+                            else {
+                                imageUploadSuccess(res, experience, image_path)
+                            }
+
+
+                        }
+
+                    })
+            }
+        })
+});
+
+function imageUploadFailed (res, message, image_path) {
+    fs.unlink(image_path, function (err) {
+        if (err) throw err;
+        console.log('successfully deleted ' + image_path);
+    });
+    res.send(message);
+};
+
+function imageUploadSuccess (res, experience, image_path) {
+    if(experience.image) {
+        fs.unlink(experience.image);
+            console.log('successfully deleted ' + experience.image);
+    }
+    experience.image = image_path;
+    experience
+        .save()
+        .complete(function(err){
+            if (!!err) {
+                console.log(err);
+                imageUploadFailed(res, 'Image failed to save to database', image_path);
+            }
+            else res.send(200);
+        });
+}
 module.exports = router;
