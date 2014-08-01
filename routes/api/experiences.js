@@ -4,6 +4,7 @@ var db = require('../../models');
 var fs = require('fs');
 var math  = require('mathjs');
 
+
 function getLngRange () {
 
 };
@@ -20,10 +21,10 @@ router.get('/', function(req, res) {
     var distance = req.query.distance;
     console.log(distance);
 
-    var lat = req.query.lat;
+    var lat = parseFloat(req.query.lat);
     console.log(lat);
 
-    var lng = req.query.lng;
+    var lng = parseFloat(req.query.lng);
     console.log(lng);
 
     if (!distance) {
@@ -38,6 +39,7 @@ router.get('/', function(req, res) {
         res.send ("need a lng coord");
     }
     else {
+
         /*calc range
          http://janmatuschek.de/LatitudeLongitudeBoundingCoordinates
         we need to:
@@ -52,7 +54,6 @@ router.get('/', function(req, res) {
         var great_circle_distance = 6371; //km
         var angular_radius = distance/great_circle_distance;
 
-        //TODO: account for if a pole is in the query later
         var lat_min = lat - angular_radius;
         var lat_max = lat + angular_radius;
 
@@ -60,28 +61,28 @@ router.get('/', function(req, res) {
         var lng_min = lng - delta_lng;
         var lng_max = lng + delta_lng;
 
-        //dealing with poles and the 180th meridian
+        //TODO: dealing with poles and the 180th meridian
 
-        //north pole in query
-        if (lat_max > (math.pi/2)){
-            lng_min = -math.pi;
-            lat_max = math.pi/2;
-            lng_max = math.pi;
-        }
-
-        //south pole in query
-        if (lat_min < (-math.pi/2)) {
-            lat_min = -math.pi/2;
-            lng_min = -math.pi;
-            lng_max = math.pi;
-        }
-
-        //180th meridian
-        if (lng_min < -math.pi || lng_max > math.pi){
-            lng_min = -math.pi;
-            lng_max = math.pi;
-
-        }
+//        //north pole in query
+//        if (lat_max > (math.pi/2)){
+//            lng_min = -math.pi;
+//            lat_max = math.pi/2;
+//            lng_max = math.pi;
+//        }
+//
+//        //south pole in query
+//        if (lat_min < (-math.pi/2)) {
+//            lat_min = -math.pi/2;
+//            lng_min = -math.pi;
+//            lng_max = math.pi;
+//        }
+//
+//        //180th meridian
+//        if (lng_min < -math.pi || lng_max > math.pi){
+//            lng_min = -math.pi;
+//            lng_max = math.pi;
+//
+//        }
 
         var sql_query = "SELECT * FROM experiences WHERE (latitude >= "
             + lat_min
@@ -89,55 +90,25 @@ router.get('/', function(req, res) {
             + lat_max
             + ") AND (longitude >= "
             + lng_min
-            + " AND longitude <= " +
+            + " AND longitude <= "
             + lng_max
-            + ") HAVING acos(sin(" + lat + ") * sin(latitude) + cos(" + lat + ") * cos(latitude) * cos(longitude - (" + lng + "))) <= " + angular_radius;
+            + ") AND acos(sin("
+            + lat
+            + ") * sin(latitude) + cos("
+            + lat
+            + ") * cos(latitude) * cos(longitude - ("
+            + lng
+            + "))) <= "
+            + angular_radius;
+
         db
+            .sequelize
             .query(sql_query)
-            .success(function (err, local_experiences){
-                if (!!err) {
-                    console.log(err);
-                    res.send(500);
-                }
-                else {
+            .success(function (local_experiences){
+                    console.log(local_experiences);
                     res.json(local_experiences);
-                }
+
             });
-//        db
-//            .Experience
-//            .find({
-//                where: {
-//                    latitude: {
-//                        gte: lat_min,
-//                        lte: lat_max
-//                    },
-//                    longitude:{
-//                        gte: lng_min,
-//                        lte: lng_max
-//                    },
-//
-//
-//                    math.acos(
-//                        math.sin(lat)
-//                        * math.sin(latitude)
-//                            +  math.cos(lat)
-//                            * math.cos(latitude)
-//                            *  math.cos(longitutde - lng))
-//                    <= angular_radius
-//                }
-//            })
-//            .complete(function(err, experiences) {
-//                if(!!err) {
-//                    console.log("An error occurred retrieving users:", err);
-//                    res.send("An error occurred retrieving users");
-//                } else if (!experiences) {
-//                    console.log("no experiences found");
-//                    res.send("no experiences found");
-//                } else {
-//                    res.json(experiences);
-//                }
-//            })
-//
     }
 
 
@@ -168,9 +139,10 @@ router.post('/', function(req, res) {
     var description = req.body.description;
     var email = req.body.email;
     var phone_number = req.body.phone_number;
+    var lat = req.body.lat;
+    var lng = req.body.lng;
 
-
-    if(!username || !password || !title || !price || !rate || !description || !email || !phone_number){
+    if(!username || !password || !title || !price || !rate || !description || !email || !phone_number || !lat || !lng){
         res.send("missing parameters!\n");
     }
 //    else if (rate !== 'hour'
@@ -199,7 +171,9 @@ router.post('/', function(req, res) {
                         description: description,
                         email: email,
                         phone_number: phone_number,
-                        image: ''
+                        image: '',
+                        latitude: lat,
+                        longitude: lng
                     });
                     experience
                         .save()
