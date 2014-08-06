@@ -9,12 +9,15 @@ var multer = require('multer');
 var routes = require('./routes/index');
 var api_users = require('./routes/api/users');
 var api_experiences = require('./routes/api/experiences');
+var auth = require('./routes/auth');
 
 var crypto = require('crypto');
 
 console.log("server is now running");
 var app = express();
 
+app.use(express.static(path.join(__dirname, '/public')));
+console.log(__dirname);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -44,12 +47,13 @@ app.use(multer({
 }));
 
 
-app.use(express.static(path.join(__dirname, 'public')));
+
 
 //routes
 app.use('/', routes);
 app.use('/api/users', api_users);
 app.use('/api/experiences', api_experiences);
+//app.use('/auth', auth);
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {

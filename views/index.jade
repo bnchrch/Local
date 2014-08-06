@@ -3,6 +3,7 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
+  a(href="/auth/facebook") Login with Facebook
   form(method="post", enctype="multipart/form-data", action="/api/experiences/upload_images")
       input(type="text", name="username")
       input(type="password", name="password")

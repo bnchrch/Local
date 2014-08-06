@@ -13,8 +13,23 @@ function getLatRange () {
 
 };
 
+router.get('/all', function(req, res) {
+    db
+        .Experience
+        .findAll()
+        .complete(function(err, experiences) {
+            if(!!err) {
+                console.log("An error occurred retrieving experiences:", err);
+                res.send("An error occurred retrieving experiences");
+            } else if (!experiences) {
+                console.log("no experiences found");
+                res.send("no experiences found");
+            } else {
+                res.json(experiences);
+            }
+        })
 
-
+});
 /* GET users listing. */
 router.get('/', function(req, res) {
     //insert stuff for high level experience
@@ -156,12 +171,14 @@ router.post('/', function(req, res) {
 
         db
             .User
-            .find({ where: { username: username, password:password } })
+            .find({ where: { username:username, password:password } })
             .complete(function(err, user) {
                 if (!!err) {
-                    console.log('An error occurred while searching user:', err)
+                    res.send('An error occurred while searching user:', err);
+                    console.log('An error occurred while searching user:', err);
                 } else if (!user) {
-                    console.log('No user with those credentials exist')
+                    res.send('No user with those credentials exist');
+                    console.log('No user with those credentials exist');
                 } else {
                     // credentials given match
                     var experience = db.Experience.build({
