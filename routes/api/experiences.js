@@ -25,7 +25,11 @@ router.get('/all', function(req, res) {
                 console.log("no experiences found");
                 res.send("no experiences found");
             } else {
-                res.json(experiences);
+                var returnObject = {
+                    experiences:experiences
+                };
+
+                res.send(JSON.stringify(returnObject));
             }
         })
 
