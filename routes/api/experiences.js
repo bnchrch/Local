@@ -25,6 +25,7 @@ router.get('/all', function(req, res) {
                 console.log("no experiences found");
                 res.send("no experiences found");
             } else {
+                res.set('Content-Type', 'application/json');
                 var returnObject = {
                     experiences:experiences
                 };
@@ -125,6 +126,7 @@ router.get('/', function(req, res) {
             .query(sql_query)
             .success(function (local_experiences){
                     console.log(local_experiences);
+                    res.set('Content-Type', 'application/json');
                     res.json(local_experiences);
 
             });
@@ -143,6 +145,7 @@ router.get('/:id', function(req, res) {
             } else if (!experience) {
                 console.log('No experience with the id has been found.')
             } else {
+                res.set('Content-Type', 'application/json');
                 res.json(experience.values);
             }
         })
@@ -293,7 +296,7 @@ function imageUploadSuccess (res, experience, image_path) {
         fs.unlink(experience.image);
             console.log('successfully deleted ' + experience.image);
     }
-    experience.image = image_path;
+    experience.image = image_path.replace('public', '');
     experience
         .save()
         .complete(function(err){
