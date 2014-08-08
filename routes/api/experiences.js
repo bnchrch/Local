@@ -125,9 +125,12 @@ router.get('/', function(req, res) {
             .sequelize
             .query(sql_query)
             .success(function (local_experiences){
-                    console.log(local_experiences);
-                    res.set('Content-Type', 'application/json');
-                    res.json(local_experiences);
+                res.set('Content-Type', 'application/json');
+                var returnObject = {
+                    experiences:local_experiences
+                };
+
+                res.send(JSON.stringify(returnObject));
 
             });
     }
