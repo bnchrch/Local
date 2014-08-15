@@ -39,10 +39,23 @@ function randomValueHex (len) {
 app.use(multer({
     dest:'./public/images',
     onFileUploadStart: function (file) {
-        if (file.mimetype != 'image/png' && file.mimetype != 'image/jpeg') return false;
+        var accepted_fieldnames = ["image0", "image1", "image2", "image3", "image4", "image5", "username", "password"];
+        if (file.mimetype != 'image/png' && file.mimetype != 'image/jpeg') {
+            console.log("rejected file upload because of mimetype: " +file.mimetype);
+            return false;
+        }
+        console.log("index: " + accepted_fieldnames.indexOf(file.fieldname));
+        if (accepted_fieldnames.indexOf(file.fieldname)=== -1) {
+            console.log("rejected because tags did not match");
+            return false;
+        }
     },
     rename: function (fieldname, filename) {
         return randomValueHex(8) + Date.now()
+    },
+    limits: {
+        fieldNameSize: 100,
+        files: 5
     }
 }));
 
