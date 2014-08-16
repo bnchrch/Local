@@ -5,7 +5,9 @@ var db = require('../../models');
 router.get('/', function(req, res) {
     db
         .User
-        .findAll()
+        .findAll({
+            attributes: ['username']
+        })
         .complete(function(err, users) {
             if(!!err) {
                 console.log("An error occurred retrieving users:", err);
@@ -39,9 +41,7 @@ router.post('/', function(req, res) {
     var username = req.body.username;
     var email = req.body.email;
     var password = req.body.password;
-
     console.log(username);
-    console.log(password);
     console.log(email);
 
     if(!username || !email || !password){
@@ -58,10 +58,10 @@ router.post('/', function(req, res) {
             .complete(function(err) {
                 if (!!err) {
                     console.log('The instance has not been saved:', err);
-                    res.send(500);
+                    res.json("an error occured while creating user: " + err.detail);
                 } else {
                     console.log('We have a persisted instance now');
-                    res.send(200)
+                    res.json(200)
                 }
             });
     }

@@ -1,6 +1,10 @@
 module.exports = function(sequelize, DataTypes) {
     var Experience = sequelize.define('Experience', {
-        is_active: DataTypes.BOOLEAN,
+        is_active: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: true,
+            allowNull: false
+        },
         expires_at: DataTypes.DATE,
         title: DataTypes.STRING,
         price: DataTypes.FLOAT,
@@ -17,8 +21,16 @@ module.exports = function(sequelize, DataTypes) {
         address: DataTypes.STRING,
         city: DataTypes.STRING,
         country: DataTypes.STRING,
-        latitude: DataTypes.FLOAT,
-        longitude: DataTypes.FLOAT
+        latitude: {
+            type: DataTypes.FLOAT,
+            allowNull: false,
+            validate: { min: -90, max: 90 }
+        },
+        longitude: {
+            type: DataTypes.FLOAT,
+            allowNull: false,
+            validate: { min: -180, max: 180 }
+        }
     }, {
         classMethods: {
             associate: function(models) {

@@ -5,14 +5,6 @@ var fs = require('fs');
 var math  = require('mathjs');
 
 
-function getLngRange () {
-
-};
-
-function getLatRange () {
-
-};
-
 router.get('/all', function(req, res) {
     db
         .Experience
@@ -71,6 +63,11 @@ router.get('/', function(req, res) {
          */
 
         //1. convert radius into lat degrees
+
+        //convert lat, lng from degrees to radians
+        lat = lat * math.pi / 180;
+        lng = lng * math.pi / 180;
+
         var great_circle_distance = 6371; //km
         var angular_radius = distance/great_circle_distance;
 
@@ -83,40 +80,41 @@ router.get('/', function(req, res) {
 
         //TODO: dealing with poles and the 180th meridian
 
-//        //north pole in query
-//        if (lat_max > (math.pi/2)){
-//            lng_min = -math.pi;
-//            lat_max = math.pi/2;
-//            lng_max = math.pi;
-//        }
-//
-//        //south pole in query
-//        if (lat_min < (-math.pi/2)) {
-//            lat_min = -math.pi/2;
-//            lng_min = -math.pi;
-//            lng_max = math.pi;
-//        }
-//
-//        //180th meridian
-//        if (lng_min < -math.pi || lng_max > math.pi){
-//            lng_min = -math.pi;
-//            lng_max = math.pi;
-//
-//        }
+        //north pole in query
+        if (lat_max > (math.pi/2)){
+            lng_min = -math.pi;
+            lat_max = math.pi/2;
+            lng_max = math.pi;
+        }
 
-        var sql_query = "SELECT * FROM experiences WHERE (latitude >= "
+        //south pole in query
+        if (lat_min < (-math.pi/2)) {
+            lat_min = -math.pi/2;
+            lng_min = -math.pi;
+            lng_max = math.pi;
+        }
+
+        //180th meridian
+        if (lng_min < -math.pi || lng_max > math.pi){
+            lng_min = -math.pi;
+            lng_max = math.pi;
+
+        }
+        console.log("lat min: " + lat_min + "lat max: " + lat_max + "lng min: " + lng_min + "lng max: " + lng_max);
+
+        var sql_query = "SELECT * FROM experiences WHERE (radians(latitude) >= "
             + lat_min
-            +  " AND latitude <= "
+            +  " AND radians(latitude) <= "
             + lat_max
-            + ") AND (longitude >= "
+            + ") AND (radians(longitude) >= "
             + lng_min
-            + " AND longitude <= "
+            + " AND radians(longitude) <= "
             + lng_max
             + ") AND acos(sin("
             + lat
-            + ") * sin(latitude) + cos("
+            + ") * sin(radians(latitude)) + cos("
             + lat
-            + ") * cos(latitude) * cos(longitude - ("
+            + ") * cos(radians(latitude)) * cos(radians(longitude) - ("
             + lng
             + "))) <= "
             + angular_radius;
@@ -166,6 +164,9 @@ router.post('/', function(req, res) {
     var phone_number = req.body.phone_number;
     var lat = req.body.lat;
     var lng = req.body.lng;
+    var address = req.body.address;
+    var city = req.body.city;
+    var country = req.body.country;
 
     if(!username || !password || !title || !price || !rate || !description || !email || !phone_number || !lat || !lng){
         res.send("missing parameters!\n");
@@ -200,7 +201,10 @@ router.post('/', function(req, res) {
                         phone_number: phone_number,
                         image: '',
                         latitude: lat,
-                        longitude: lng
+                        longitude: lng,
+                        address: address,
+                        city: city,
+                        country: country
                     });
                     experience
                         .save()
