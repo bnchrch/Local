@@ -4,6 +4,10 @@ var db = require('../../models');
 var fs = require('fs');
 var math  = require('mathjs');
 
+var geocoderProvider = 'google';
+var httpAdapter = 'http';
+var geocoder = require('node-geocoder').getGeocoder(geocoderProvider, httpAdapter);
+
 
 router.get('/all', function(req, res) {
     db
@@ -162,74 +166,77 @@ router.post('/', function(req, res) {
     var description = req.body.description;
     var email = req.body.email;
     var phone_number = req.body.phone_number;
-    var lat = req.body.lat;
-    var lng = req.body.lng;
     var address = req.body.address;
-    var city = req.body.city;
-    var country = req.body.country;
 
-    if(!username || !password || !title || !price || !rate || !description || !email || !phone_number || !lat || !lng){
+
+
+
+    if(!username || !password || !title || !price || !rate || !description || !email || !phone_number || !address){
         res.send("missing parameters!\n");
     }
-//    else if (rate !== 'hour'
-//        || rate != 'day'
-//        ||  rate != 'week'
-//        ||  rate != 'month' ) {
-//        res.send('Your rate must be per hour, day, week, or month');
-//
-//    }
+
+
+
     else{
+        geocoder.geocode(address, function(err, geoData) {
+            if (!!err) {
+                res.json("error occured when looking up address");
+                console.log("error occured when looking up address: " + err);
+            }
+            else {
+                db
+                    .User
+                    .find({ where: { username:username, password:password } })
+                    .complete(function(err, user) {
+                        if (!!err) {
+                            res.send('An error occurred while searching user:', err);
+                            console.log('An error occurred while searching user:', err);
+                        } else if (!user) {
+                            res.send('No user with those credentials exist');
+                            console.log('No user with those credentials exist');
+                        } else {
+                            // credentials given match
+                            var experience = db.Experience.build({
+                                title: title,
+                                price: price,
+                                rate: rate,
+                                description: description,
+                                email: email,
+                                phone_number: phone_number,
+                                latitude: geoData[0].latitude,
+                                longitude: geoData[0].longitude,
+                                street_name: geoData[0].streetName,
+                                street_number: geoData[0].streetNumber,
+                                zipcode: geoData[0].zipcode,
+                                state: geoData[0].state,
+                                city: geoData[0].city,
+                                country: geoData[0].country
+                            });
+                            experience
+                                .save()
+                                .complete(function(err, experience) {
+                                    if (!!err) {
+                                        console.log('The instance has not been saved:', err);
+                                        res.json(err.detail);
+                                    } else {
+                                        console.log('We have a persisted instance now');
+                                        experience
+                                            .setUser(user)
+                                            .complete(function(err){
+                                                if(!!err){
+                                                    console.log("failed to associate experience with user");
+                                                } else {
+                                                    console.log("associated successfully!")
+                                                }
+                                            });
+                                        res.send(200)
+                                    }
+                                });
+                        }
+                    })
+            }
 
-        db
-            .User
-            .find({ where: { username:username, password:password } })
-            .complete(function(err, user) {
-                if (!!err) {
-                    res.send('An error occurred while searching user:', err);
-                    console.log('An error occurred while searching user:', err);
-                } else if (!user) {
-                    res.send('No user with those credentials exist');
-                    console.log('No user with those credentials exist');
-                } else {
-                    // credentials given match
-                    var experience = db.Experience.build({
-                        title: title,
-                        price: price,
-                        rate: rate,
-                        description: description,
-                        email: email,
-                        phone_number: phone_number,
-                        image: '',
-                        latitude: lat,
-                        longitude: lng,
-                        address: address,
-                        city: city,
-                        country: country
-                    });
-                    experience
-                        .save()
-                        .complete(function(err, experience) {
-                            if (!!err) {
-                                console.log('The instance has not been saved:', err);
-                                res.send(500);
-                            } else {
-                                console.log('We have a persisted instance now');
-                                experience
-                                    .setUser(user)
-                                    .complete(function(err){
-                                       if(!!err){
-                                           console.log("failed to associate experience with user");
-                                       } else {
-                                           console.log("associated successfully!")
-                                       }
-                                    });
-                                res.send(200)
-                            }
-                        });
-                }
-            })
-
-
+        });
 
     }
 

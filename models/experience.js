@@ -18,9 +18,6 @@ module.exports = function(sequelize, DataTypes) {
         image3: DataTypes.STRING,
         image4: DataTypes.STRING,
         image5: DataTypes.STRING,
-        address: DataTypes.STRING,
-        city: DataTypes.STRING,
-        country: DataTypes.STRING,
         latitude: {
             type: DataTypes.FLOAT,
             allowNull: false,
@@ -30,7 +27,14 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.FLOAT,
             allowNull: false,
             validate: { min: -180, max: 180 }
-        }
+        },
+        street_name: DataTypes.STRING,
+        street_number: DataTypes.STRING,
+        zipcode: DataTypes.STRING,
+        state: DataTypes.STRING,
+        city: DataTypes.STRING,
+        country: DataTypes.STRING
+
     }, {
         classMethods: {
             associate: function(models) {
