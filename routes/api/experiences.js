@@ -3,7 +3,7 @@ var router = express.Router();
 var db = require('../../models');
 var fs = require('fs');
 var math  = require('mathjs');
-
+var validator = require('validator');
 var geocoderProvider = 'google';
 var httpAdapter = 'http';
 var geocoder = require('node-geocoder').getGeocoder(geocoderProvider, httpAdapter);
@@ -34,27 +34,28 @@ router.get('/all', function(req, res) {
 /* GET users listing. */
 router.get('/', function(req, res) {
     //insert stuff for high level experience
-    var distance = req.query.distance;
-    console.log(distance);
 
-    var lat = parseFloat(req.query.lat);
-    console.log(lat);
 
-    var lng = parseFloat(req.query.lng);
-    console.log(lng);
-
-    if (!distance) {
-        res.send ("need a distance");
+    if (!req.query.distance || !validator.isFloat(req.query.distance)) {
+        res.json ("need a distance");
     }
 
-    else if (!lat) {
-        res.send ("need a lat coord");
+    else if (!req.query.lat || !validator.isFloat(req.query.lat)) {
+        res.json ("need a lat coord");
     }
 
-    else if (!lng) {
-        res.send ("need a lng coord");
+    else if (!req.query.lng || !validator.isFloat(req.query.lng)) {
+        res.json ("need a lng coord");
     }
     else {
+        var distance = validator.escape(req.query.distance);
+        console.log(distance);
+
+        var lat = validator.escape(parseFloat(req.query.lat));
+        console.log(lat);
+
+        var lng = validator.escape(parseFloat(req.query.lng));
+        console.log(lng);
 
         /*calc range
          http://janmatuschek.de/LatitudeLongitudeBoundingCoordinates
@@ -172,10 +173,12 @@ router.post('/', function(req, res) {
 
 
     if(!username || !password || !title || !price || !rate || !description || !email || !phone_number || !address){
-        res.send("missing parameters!\n");
+        res.json("missing parameters!");
     }
 
-
+    else if (!validator.isEmail(email)){
+        res.json("Please enter a valid email address");
+    }
 
     else{
         geocoder.geocode(address, function(err, geoData) {

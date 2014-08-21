@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../../models');
-
+var validator = require('validator');
 router.get('/', function(req, res) {
     db
         .User
@@ -46,6 +46,9 @@ router.post('/', function(req, res) {
 
     if(!username || !email || !password){
         res.send("missing parameters!\n");
+    }
+    else if (!validator.isEmail(email)){
+        res.json("Please enter a valid email address");
     }
     else{
         var user = db.User.build({

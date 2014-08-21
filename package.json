@@ -21,6 +21,7 @@
     "pg": "~3.3.0",
     "postgresql": "0.0.1",
     "sequelize": "^1.7.9",
-    "static-favicon": "~1.0.0"
+    "static-favicon": "~1.0.0",
+    "validator": "^3.17.0"
   }
 }
