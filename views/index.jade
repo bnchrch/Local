@@ -1,14 +1,51 @@
 extends layout
-head
-      meta(name='keywords', content='foo bar baz')
+link(rel='stylesheet', href='/stylesheets/style.css')
+link(rel='stylesheet', href='//cdn-images.mailchimp.com/embedcode/slim-081711.css')
 block content
-  h1= title
-  p Welcome to #{title}
-  a(href="/auth/facebook") Login with Facebook
-  form(method="post", enctype="multipart/form-data", action="/api/experiences/upload_images")
-      input(type="text", name="username")
-      input(type="password", name="password")
-      input(type="file", name="thumbnail")
-      input(type="submit")
+    #intro.container-fluid
+        #headerText.row-fluid
+            div.col-md-7.text-center
+                h1 Local
 
+
+    #aboutApp.container-fluid
+        div.row-fluid.padding-bottom-10
+            div.col-md-6
+                h1 What’s fun to do around here?
+                p Local is an iPhone app that gathers activities and experiences located around the user, and displays them ranked by popularity. It provides a detailed overview of everything fun to do in your area, whether your a seasoned local, or a total newbie. Local helps you get past the hotel info desk and out into the real world, where the real fun is!
+
+            img(src='/images/main_screen.png').col-md-offset-1.col-md-4.overlapUp
+
+
+    #aboutApp.container-fluid
+        div.dividerSplash
+        div.row-fluid
+            img(src='/images/detail_main.png').col-md-3.col-md-offset-1.padding-top-40
+            div.col-md-6.col-md-offset-1.padding-top-80
+                h1 Want to Learn More?
+                p Once an activity is selected, users will be able to flip through multiple pictures, and learn many other details about their trip. All communication is facilitated through Local, making it simple and easy to organize your trip directly with your host. Entrepreneurial locals and established businesses alike can create their own activities, set their own prices, communicate with customers, and be paid all directly through the app.
+
+    #aboutUs.container-fluid
+        div.dividerSplash
+        div.row-fluid
+            div.col-md-6.col-md-offset-1.padding-top-80
+                h1 Is this trip right for me?
+                p Our peer-review system allows users to comment and communicate with hosts, and each other. This provides real-world feedback, helping you discern between what is a “must-see” activity and what is a “maybe next time.” To add your own experiences of the activity, it’s as easy as typing in the comment box!
+            img(src='/images/detail_review.png').col-md-3.col-md-offset-1.padding-top-40
+
+
+    #footer.container-fluid
+        div.row-fluid
+            img(src='/images/placeholder_handles.png').col-md-4.col-md-offset-1
+
+            #mc_embed_signup.col-md-5.col-md-offset-1
+                form#mc-embedded-subscribe-form.validate(action='//local-app.us9.list-manage.com/subscribe/post?u=4a7932d8a24f32cb4eeb983b3&id=1a9a37b118', method='post', name='mc-embedded-subscribe-form', target='_blank', novalidate='novalidate')
+                    label(for='mce-EMAIL') Subscribe to our mailing list
+                    input#mce-EMAIL(type='email', value='', name='EMAIL', placeholder='email address', required='required')
+                    //
+                       real people should not fill this in and expect good things - do not remove this or risk form bot signups
+                    div(style='position: absolute; left: -5000px;')
+                        input(type='text', name='b_4a7932d8a24f32cb4eeb983b3_1a9a37b118', tabindex='-1', value='')
+                    .clear
+                        input#mc-embedded-subscribe.button.btn.btn-large(type='submit', value='Subscribe', name='subscribe')
 

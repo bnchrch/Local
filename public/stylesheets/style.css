@@ -1,8 +1,95 @@
+@font-face{
+    font-family: "dearJoe";
+    src: url('../dearJoe6.ttf'),
+    url('../dearJoe6.otf'); /* IE */
+}
+
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-family: "Avenir Next";
 }
 
 a {
   color: #00B7FF;
+}
+
+#intro {
+    background-color: #29FDC8 ;
+    height: 365px;
+    color: white;
+    border-bottom: 1px;
+
+
+
+}
+#intro h1 {
+    font-size: 140px;
+    font-family: dearJoe;
+}
+#headerText {
+    margin-top: 110px;
+
+}
+#headerText p {
+    font-size: 20px;
+    font-family: "Avenir Next";
+}
+
+.overlapUp {
+    margin-top: -350px;
+}
+
+#aboutApp {
+    padding: 10px 0px 0px 40px;
+    margin-top: 30px;
+}
+#aboutApp h1 {
+    padding: 10px;
+}
+#aboutApp p {
+    padding: 10px;
+}
+.padding-bottom-10 {
+    padding-bottom: 10px;
+}
+
+.padding-top-40 {
+    padding-top: 40px;
+}
+
+.padding-top-80 {
+    padding-top: 80px;
+}
+.padding-left-10 {
+    padding-left: 10px;
+}
+.margin-top-30 {
+    margin-top: 30px;
+}
+#aboutUs {
+    border-top-color: black;
+    border-top-width: 1px;
+    padding: 40px;
+}
+.dividerSplash {
+    width: auto;
+    height: 1px;
+    background-color: grey;
+    margin: 20px 0px 40px 0px;
+}
+
+#footer {
+    background-color: #29FDC8 ;
+    height: 300px;
+    color: white;
+    border-bottom: 1px;
+}
+#mc_embed_signup {
+    padding: 40px;
+    clear: left;
+    font: 20px Helvetica, Arial, sans-serif;
+}
+.clearThis {
+    position: absolute;
+    left: -5000px;
 }
