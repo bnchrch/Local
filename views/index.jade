@@ -1,51 +1,75 @@
+block variables
+    title = "Local App"
+
 extends layout
 link(rel='stylesheet', href='/stylesheets/style.css')
-link(rel='stylesheet', href='//cdn-images.mailchimp.com/embedcode/slim-081711.css')
+script(type='text/javascript' src='/javascripts/social.js')
+//link(rel='stylesheet', href='//cdn-images.mailchimp.com/embedcode/slim-081711.css')
 block content
     #intro.container-fluid
         #headerText.row-fluid
             div.col-md-7.text-center
                 h1 Local
 
-
     #aboutApp.container-fluid
         div.row-fluid.padding-bottom-10
             div.col-md-6
                 h1 What’s fun to do around here?
-                p Local is an iPhone app that gathers activities and experiences located around the user, and displays them ranked by popularity. It provides a detailed overview of everything fun to do in your area, whether your a seasoned local, or a total newbie. Local helps you get past the hotel info desk and out into the real world, where the real fun is!
-
-            img(src='/images/main_screen.png').col-md-offset-1.col-md-4.overlapUp
+                p Local is an iPhone app that gathers activities and experiences located around the user, displaying them ranked by popularity and satisfaction. It provides everything there is to do in your area, so that you never miss out on a fun experience again just because “No one told you.”
+                p Whether you’re a seasoned veteran, or a total newbie, Local helps you get past the hotel info desk and out into the real world, where the real fun is!
+        img(src='/assets/main_screen.png').col-md-offset-1.col-md-4.overlapUp
 
 
     #aboutApp.container-fluid
         div.dividerSplash
         div.row-fluid
-            img(src='/images/detail_main.png').col-md-3.col-md-offset-1.padding-top-40
+            img(src='/assets/detail_main.png').col-md-3.col-md-offset-1.padding-top-40
             div.col-md-6.col-md-offset-1.padding-top-80
                 h1 Want to Learn More?
-                p Once an activity is selected, users will be able to flip through multiple pictures, and learn many other details about their trip. All communication is facilitated through Local, making it simple and easy to organize your trip directly with your host. Entrepreneurial locals and established businesses alike can create their own activities, set their own prices, communicate with customers, and be paid all directly through the app.
+                p Once an activity is selected, users will be able to flip through multiple pictures, and learn many other details about their trip. All communication is facilitated through Local, making it simple and easy to organize your trip directly with your host.
+                p Entrepreneurial locals and established businesses alike can create their own activities, set their own prices, communicate with customers, and be paid all directly through the app.
 
-    #aboutUs.container-fluid
+    #aboutApp.container-fluid
         div.dividerSplash
         div.row-fluid
             div.col-md-6.col-md-offset-1.padding-top-80
                 h1 Is this trip right for me?
                 p Our peer-review system allows users to comment and communicate with hosts, and each other. This provides real-world feedback, helping you discern between what is a “must-see” activity and what is a “maybe next time.” To add your own experiences of the activity, it’s as easy as typing in the comment box!
-            img(src='/images/detail_review.png').col-md-3.col-md-offset-1.padding-top-40
+            img(src='/assets/detail_review.png').col-md-3.col-md-offset-1.padding-top-40
 
 
-    #footer.container-fluid
+    #footer.container-fluid.margin-top-20
         div.row-fluid
-            img(src='/images/placeholder_handles.png').col-md-4.col-md-offset-1
+            .col-md-4.col-md-offset-1
+                div#launchCopy
+                    h1 Subscribe!
+                    h2 to our mailing list and get notified when we launch!
 
-            #mc_embed_signup.col-md-5.col-md-offset-1
-                form#mc-embedded-subscribe-form.validate(action='//local-app.us9.list-manage.com/subscribe/post?u=4a7932d8a24f32cb4eeb983b3&id=1a9a37b118', method='post', name='mc-embedded-subscribe-form', target='_blank', novalidate='novalidate')
-                    label(for='mce-EMAIL') Subscribe to our mailing list
-                    input#mce-EMAIL(type='email', value='', name='EMAIL', placeholder='email address', required='required')
-                    //
-                       real people should not fill this in and expect good things - do not remove this or risk form bot signups
+                div#socialShare
+                    | <div id="fb-root"></div>
+                    | <script>(function(d, s, id) {
+                    | var js, fjs = d.getElementsByTagName(s)[0];
+                    | if (d.getElementById(id)) return;
+                    | js = d.createElement(s); js.id = id;
+                    | js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=678994002189613&version=v2.0";
+                    | fjs.parentNode.insertBefore(js, fjs);
+                    | }(document, 'script', 'facebook-jssdk'));</script>
+                    | <div class="fb-like" data-href="http://local-app.co" data-layout="button" data-action="like" data-show-faces="false" data-share="true"></div>
+                    | <a href="https://twitter.com/intent/tweet?screen_name=localsgo&text=Check%20out%20the%20guys%20at%20Local!%20Changing%20the%20way%20I%20travel%20for%20sure" class="twitter-mention-button">Tweet to @localsgo</a>
+                    | <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+            #mc_embed_signup.col-md-4.col-md-offset-1.padding-top-40
+                img(src='/assets/socialBanner.png').padding-bottom-10
+                form#mc-embedded-subscribe-form.form-horizontal.validate(action='//local-app.us9.list-manage.com/subscribe/post?u=4a7932d8a24f32cb4eeb983b3&id=1a9a37b118', method='post', name='mc-embedded-subscribe-form', target='_blank', novalidate='novalidate')
+                    .mc-field-group.form-group.margin-left-0
+                        label.control-label(for='mce-EMAIL') Email Address
+                        input#mce-EMAIL.form-control.required.email(type='email', value='', name='EMAIL', placeholder='your@email.com')
+                    #mce-responses.clear
+                        #mce-error-response.response(style='display: none;')
+                        #mce-success-response.response(style='display: none;')
                     div(style='position: absolute; left: -5000px;')
                         input(type='text', name='b_4a7932d8a24f32cb4eeb983b3_1a9a37b118', tabindex='-1', value='')
                     .clear
-                        input#mc-embedded-subscribe.button.btn.btn-large(type='submit', value='Subscribe', name='subscribe')
+                        input#mc-embedded-subscribe.btn.btn-default.button(type='submit', value='Subscribe', name='subscribe')
+
 

@@ -4,6 +4,13 @@
     url('../dearJoe6.otf'); /* IE */
 }
 
+#socialShare {
+    padding-top: 10px;
+
+}
+.twitter-mention-button {
+    vertical-align: text-bottom !important;
+}
 body {
   font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
   font-family: "Avenir Next";
@@ -15,12 +22,21 @@ a {
 
 #intro {
     background-color: #29FDC8 ;
+    background-image: -webkit-gradient(
+            linear,
+            left top,
+            right bottom,
+            color-stop(1, #29FDC8),
+            color-stop(1, #4CFF9A)
+    );
+    background-image: -o-linear-gradient(315deg, #29FDC8 100%, #4CFF9A 100%);
+    background-image: -moz-linear-gradient(315deg, #29FDC8 1000%, #4CFF9A 100%);
+    background-image: -webkit-linear-gradient(315deg, #29FDC8 100%, #4CFF9A 100%);
+    background-image: -ms-linear-gradient(315deg, #29FDC8 100%, #4CFF9A 100%);
+    background-image: linear-gradient(135deg, #29FDC8 100%, #4CFF9A 100%);
     height: 365px;
     color: white;
     border-bottom: 1px;
-
-
-
 }
 #intro h1 {
     font-size: 140px;
@@ -53,6 +69,10 @@ a {
     padding-bottom: 10px;
 }
 
+.padding-top-30 {
+    padding-top: 30px;
+}
+
 .padding-top-40 {
     padding-top: 40px;
 }
@@ -62,6 +82,9 @@ a {
 }
 .padding-left-10 {
     padding-left: 10px;
+}
+.margin-top-20 {
+    margin-top: 20px;
 }
 .margin-top-30 {
     margin-top: 30px;
@@ -80,16 +103,37 @@ a {
 
 #footer {
     background-color: #29FDC8 ;
+    background-image: -webkit-gradient(
+            linear,
+            left top,
+            right bottom,
+            color-stop(0, #29FDC8),
+            color-stop(1, #4CFF9A)
+    );
+    background-image: -o-linear-gradient(315deg, #29FDC8 0%, #4CFF9A 100%);
+    background-image: -moz-linear-gradient(315deg, #29FDC8 0%, #4CFF9A 100%);
+    background-image: -webkit-linear-gradient(315deg, #29FDC8 0%, #4CFF9A 100%);
+    background-image: -ms-linear-gradient(315deg, #29FDC8 0%, #4CFF9A 100%);
+    background-image: linear-gradient(135deg, #29FDC8 0%, #4CFF9A 100%);
     height: 300px;
     color: white;
     border-bottom: 1px;
+    padding-top: 20px;
 }
 #mc_embed_signup {
-    padding: 40px;
-    clear: left;
-    font: 20px Helvetica, Arial, sans-serif;
+
+}
+#launchCopy h1, h2{
+    font-family: dearJoe;
+
+}
+#launchCopy h1 {
+    font-size: 80px;
 }
 .clearThis {
     position: absolute;
     left: -5000px;
+}
+.margin-left-0 {
+    margin-left: 0px !important;
 }
