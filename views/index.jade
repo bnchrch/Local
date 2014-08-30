@@ -17,13 +17,13 @@ block content
                 h1 What’s fun to do around here?
                 p Local is an iPhone app that gathers activities and experiences located around the user, displaying them ranked by popularity and satisfaction. It provides everything there is to do in your area, so that you never miss out on a fun experience again just because “No one told you.”
                 p Whether you’re a seasoned veteran, or a total newbie, Local helps you get past the hotel info desk and out into the real world, where the real fun is!
-        img(src='/assets/main_screen.png').col-md-offset-1.col-md-4.overlapUp
+        img.im(src='/assets/main_screen.png').col-md-offset-1.col-md-4.overlapUp.img-responsive
 
 
     #aboutApp.container-fluid
         div.dividerSplash
         div.row-fluid
-            img(src='/assets/detail_main.png').col-md-3.col-md-offset-1.padding-top-40
+            img(src='/assets/detail_main.png').col-md-3.col-md-offset-1.padding-top-40.img-responsive
             div.col-md-6.col-md-offset-1.padding-top-80
                 h1 Want to Learn More?
                 p Once an activity is selected, users will be able to flip through multiple pictures, and learn many other details about their trip. All communication is facilitated through Local, making it simple and easy to organize your trip directly with your host.
@@ -35,7 +35,7 @@ block content
             div.col-md-6.col-md-offset-1.padding-top-80
                 h1 Is this trip right for me?
                 p Our peer-review system allows users to comment and communicate with hosts, and each other. This provides real-world feedback, helping you discern between what is a “must-see” activity and what is a “maybe next time.” To add your own experiences of the activity, it’s as easy as typing in the comment box!
-            img(src='/assets/detail_review.png').col-md-3.col-md-offset-1.padding-top-40
+            img(src='/assets/detail_review.png').col-md-3.col-md-offset-1.padding-top-40.img-responsive
 
 
     #footer.container-fluid.margin-top-20
@@ -58,8 +58,7 @@ block content
                     | <a href="https://twitter.com/intent/tweet?screen_name=localsgo&text=Check%20out%20the%20guys%20at%20Local!%20Changing%20the%20way%20I%20travel%20for%20sure" class="twitter-mention-button">Tweet to @localsgo</a>
                     | <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 
-            #mc_embed_signup.col-md-4.col-md-offset-1.padding-top-40
-                img(src='/assets/socialBanner.png').padding-bottom-10
+            #mc_embed_signup.col-md-4.col-md-offset-1.padding-top-30
                 form#mc-embedded-subscribe-form.form-horizontal.validate(action='//local-app.us9.list-manage.com/subscribe/post?u=4a7932d8a24f32cb4eeb983b3&id=1a9a37b118', method='post', name='mc-embedded-subscribe-form', target='_blank', novalidate='novalidate')
                     .mc-field-group.form-group.margin-left-0
                         label.control-label(for='mce-EMAIL') Email Address
@@ -71,5 +70,8 @@ block content
                         input(type='text', name='b_4a7932d8a24f32cb4eeb983b3_1a9a37b118', tabindex='-1', value='')
                     .clear
                         input#mc-embedded-subscribe.btn.btn-default.button(type='submit', value='Subscribe', name='subscribe')
+
+
+                img(src='/assets/socialBanner.png').padding-top-30.img-responsive
 
 

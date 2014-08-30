@@ -51,10 +51,6 @@ a {
     font-family: "Avenir Next";
 }
 
-.overlapUp {
-    margin-top: -350px;
-}
-
 #aboutApp {
     padding: 10px 0px 0px 40px;
     margin-top: 30px;
@@ -115,10 +111,10 @@ a {
     background-image: -webkit-linear-gradient(315deg, #29FDC8 0%, #4CFF9A 100%);
     background-image: -ms-linear-gradient(315deg, #29FDC8 0%, #4CFF9A 100%);
     background-image: linear-gradient(135deg, #29FDC8 0%, #4CFF9A 100%);
-    height: 300px;
+    height: auto;
     color: white;
     border-bottom: 1px;
-    padding-top: 20px;
+    padding: 20px 10px 20px 10px;
 }
 #mc_embed_signup {
 
@@ -136,4 +132,11 @@ a {
 }
 .margin-left-0 {
     margin-left: 0px !important;
+}
+
+@media screen and (min-width: 980px) {
+    .overlapUp {
+        margin-top: -350px;
+    }
+
 }
