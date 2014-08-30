@@ -48,6 +48,13 @@ a {
     font-size: 140px;
     font-family: dearJoe;
 }
+
+@media(max-width: 480px) {
+#intro h1 {
+    font-size: 100px;
+  }
+}
+
 #headerText {
     margin-top: 110px;
 
