@@ -11,6 +11,12 @@
 .twitter-mention-button {
     vertical-align: text-bottom !important;
 }
+
+html, body {
+    width: auto !important;
+    overflow-x: hidden !important;
+}
+
 body {
   font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
   font-family: "Avenir Next";
