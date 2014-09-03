@@ -50,9 +50,12 @@ a {
 }
 
 @media(max-width: 480px) {
-#intro h1 {
-    font-size: 100px;
-  }
+    #intro h1 {
+        font-size: 100px;
+    }
+    #launchCopy h1 {
+        font-size: 60px;
+    }
 }
 
 #headerText {
