@@ -156,7 +156,6 @@ router.get('/:id', function(req, res) {
             }
         })
 });
-
 router.post('/', function(req, res) {
     var username = req.body.username;
     var password = req.body.password;
@@ -244,6 +243,199 @@ router.post('/', function(req, res) {
     }
 
 });
+
+router.put('/:id', function(req, res) {
+    var experience_id = req.params.id;
+
+    var username = req.body.username;
+    var password = req.body.password;
+
+    var title = req.body.title;
+    var price = req.body.price;
+    var rate = req.body.rate;
+    var description = req.body.description;
+    var email = req.body.email;
+    var phone_number = req.body.phone_number;
+
+    //let a user specify a new address by the actual address or coords
+    var address = req.body.address;
+
+    //other set
+    var latitude = req.body.latitude;
+    var longitude = req.body.longitude;
+
+    var submittedAddress = false;
+
+    if (address) {
+        submittedAddress = true;
+    }
+    else if (latitude && longitude) submittedAddress = true;
+
+    if(!username || !password || !title || !price || !rate || !description || !email || !phone_number || !submittedAddress){
+        res.json("missing parameters!");
+    }
+
+    else if (!validator.isEmail(email)){
+        res.json("Please enter a valid email address");
+    }
+
+    //all needed values present
+    else{
+        db
+            .User
+            .find({ where: { username:username, password:password } })
+            .complete(function(err, user) {
+                if (!!err) {
+                    res.send('An error occurred while searching user:', err);
+                    console.log('An error occurred while searching user:', err);
+                } else if (!user) {
+                    res.send('No user with those credentials exist');
+                    console.log('No user with those credentials exist');
+                } else {
+                    // user credentials given match
+                    db
+                        .Experience
+                        .find({ where: { id: experience_id}})
+                        .complete(function (err, experience) {
+                            if (!!err) {
+                                console.log('An error occurred while searching experience:', err);
+                                res.json('An error occurred while searching experience');
+                            } else if (!experience) {
+                                console.log('No experience matches the id');
+                                res.json('No experience matches the id');
+                            }
+                            else {
+                                if (!experience.hasUser(user)) {
+                                    res.json('user does not own this experience')
+                                }
+                                else {
+                                    //experience exists, user exists, user owns experience
+                                    experience.title = title;
+                                    experience.price = price;
+                                    experience.rate = rate;
+                                    experience.description = description;
+                                    experience.email = email;
+                                    experience.phone_number = phone_number;
+
+                                    if (address){
+                                        //get the address from google
+                                        geocoder.geocode(address, function(err, geoData) {
+                                            if (!!err) {
+                                                res.json("error occured when looking up address");
+                                                console.log("error occured when looking up address: " + err);
+                                            }
+                                            else {
+                                                //update the address with the geocoded stuff
+
+                                                experience.latitude =  geoData[0].latitude;
+                                                experience.longitude = geoData[0].longitude;
+                                                experience.street_name = geoData[0].streetName;
+                                                experience.street_number = geoData[0].streetNumber;
+                                                experience.zipcode = geoData[0].zipcode;
+                                                experience.state = geoData[0].state;
+                                                experience.city = geoData[0].city;
+                                                experience.country = geoData[0].country;
+                                                experience
+                                                    .save()
+                                                    .complete(function(err){
+                                                        if (!!err) {
+                                                            console.log(err);
+                                                            res.json('failed to update the experience');
+                                                        }
+                                                        else {
+                                                            res.send(200);
+                                                        }
+                                                    });
+
+                                            }
+                                        })
+                                    }
+                                    else {
+                                        //update lat lng
+                                        experience.latitude = latitude;
+                                        experience.longitude = longitude;
+                                        experience
+                                            .save()
+                                            .complete(function(err){
+                                                if (!!err) {
+                                                    console.log(err);
+                                                    res.json('failed to update the experience');
+                                                }
+                                                else {
+                                                    res.send(200);
+                                                }
+                                            });
+                                    }
+
+                                }
+                            }
+                        });
+
+
+                }
+            })
+
+
+        };
+
+});
+
+router.delete('/:id', function(req, res) {
+        var username = req.body.username;
+        var password = req.body.password;
+        var experience_id = req.params.id;
+
+
+        console.log(username + " " + password);
+        db
+            .User
+            .find({ where: { username: username, password: password } })
+            .complete(function (err, user) {
+                if (!!err) {
+                    console.log('An error occurred while searching user:', err);
+                    res.json('An error occurred while searching user');
+                } else if (!user) {
+                    console.log('No user with those credentials exist', err);
+                    res.json('No user with those credentials exist');
+                }
+                else {
+                    db
+                        .Experience
+                        .find({ where: { id: experience_id}})
+                        .complete(function (err, experience) {
+                            if (!!err) {
+                                console.log('An error occurred while searching experience:', err);
+                                res.json('An error occurred while searching experience');
+                            } else if (!experience) {
+                                console.log('No experience matches the id');
+                                res.json('No experience matches the id');
+                            }
+                            else {
+                                if (!experience.hasUser(user)) {
+                                    res.json('user does not own this experience')
+                                }
+                                else {
+                                    experience
+                                        .destroy()
+                                        .complete(function(err){
+                                            if(!!err) {
+                                                console.log(err);
+                                                res.json('experience failed to delete from database');
+                                            }
+                                            else {
+                                                res.send(200);
+                                            }
+                                        })
+                                }
+
+
+                            }
+
+                        })
+                }
+            })
+    }
+);
 
 function isEmptyObject(obj) {
     return !Object.keys(obj).length;
