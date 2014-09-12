@@ -2,7 +2,12 @@ module.exports = function(sequelize, DataTypes) {
     var Experience = sequelize.define('Experience', {
         is_active: {
             type: DataTypes.BOOLEAN,
-            defaultValue: true,
+            defaultValue: false,
+            allowNull: false
+        },
+        is_secret: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
             allowNull: false
         },
         expires_at: DataTypes.DATE,

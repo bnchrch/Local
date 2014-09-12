@@ -1,10 +1,12 @@
+var config = require('../config/config.json');
+
 var fs        = require('fs')
     , path      = require('path')
     , Sequelize = require('sequelize')
     , lodash    = require('lodash')
-    , sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PWD, {
-        dialect: "postgres", // or 'sqlite', 'postgres', 'mariadb'
-        port:    5432 // or 5432 (for postgres)
+    , sequelize = new Sequelize(config[process.env.NODE_ENV].database, config[process.env.NODE_ENV].username, config[process.env.NODE_ENV].password, {
+        dialect: config[process.env.NODE_ENV].dialect, // or 'sqlite', 'postgres', 'mariadb'
+        port:    config[process.env.NODE_ENV].port // or 5432 (for postgres)
     })
     , db        = {};
 

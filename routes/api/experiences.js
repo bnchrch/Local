@@ -35,7 +35,6 @@ router.get('/all', function(req, res) {
 router.get('/', function(req, res) {
     //insert stuff for high level experience
 
-
     if (!req.query.distance || !validator.isFloat(req.query.distance)) {
         res.json ("need a distance");
     }
@@ -107,7 +106,7 @@ router.get('/', function(req, res) {
         }
         console.log("lat min: " + lat_min + "lat max: " + lat_max + "lng min: " + lng_min + "lng max: " + lng_max);
 
-        var sql_query = "SELECT * FROM experiences WHERE (radians(latitude) >= "
+        var sql_query = "SELECT * FROM experiences WHERE is_active AND (radians(latitude) >= "
             + lat_min
             +  " AND radians(latitude) <= "
             + lat_max
@@ -168,8 +167,7 @@ router.post('/', function(req, res) {
     var phone_number = req.body.phone_number;
     var address = req.body.address;
 
-
-
+    var is_secret = req.body.is_secret;
 
     if(!username || !password || !title || !price || !rate || !description || !email || !phone_number || !address){
         res.json("missing parameters!");
@@ -177,6 +175,10 @@ router.post('/', function(req, res) {
 
     else if (!validator.isEmail(email)){
         res.json("Please enter a valid email address");
+    }
+
+    else if (!is_secret) {
+        res.json("Please specify if secret or experience")
     }
 
     else{
@@ -212,7 +214,8 @@ router.post('/', function(req, res) {
                                 zipcode: geoData[0].zipcode,
                                 state: geoData[0].state,
                                 city: geoData[0].city,
-                                country: geoData[0].country
+                                country: geoData[0].country,
+                                is_secret: is_secret
                             });
                             experience
                                 .save()
@@ -257,6 +260,8 @@ router.put('/:id', function(req, res) {
     var email = req.body.email;
     var phone_number = req.body.phone_number;
 
+    var is_secret = req.body.is_secret;
+
     //let a user specify a new address by the actual address or coords
     var address = req.body.address;
 
@@ -275,9 +280,14 @@ router.put('/:id', function(req, res) {
         res.json("missing parameters!");
     }
 
-    else if (!validator.isEmail(email)){
+    else if (!validator.isEmail(email)) {
         res.json("Please enter a valid email address");
+
     }
+
+    else if (!is_secret) {
+            res.json("Please specify if secret or experience")
+        }
 
     //all needed values present
     else{
@@ -316,6 +326,7 @@ router.put('/:id', function(req, res) {
                                     experience.description = description;
                                     experience.email = email;
                                     experience.phone_number = phone_number;
+                                    experience.is_secret = is_secret;
 
                                     if (address){
                                         //get the address from google
@@ -504,7 +515,12 @@ function deleteImage(res, experience, image_label) {
             console.log("hit default during delete: " + image_label);
 
     }
-
+    if (experience.image0) {
+        experience.is_active = true;
+    }
+    else {
+        experience.is_active = false;
+    }
     //todo: need error catching if this fails
 
     experience
@@ -715,6 +731,13 @@ function imageUploadSuccess (res, experience, files) {
                 console.log("hit default: "+ i);
 
         }
+    }
+
+    if (experience.image0) {
+        experience.is_active = true;
+    }
+    else {
+        experience.is_active = false;
     }
     console.log("about to save");
     experience
