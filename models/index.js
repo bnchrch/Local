@@ -1,5 +1,4 @@
 var config = require('../config/config.json');
-
 var fs        = require('fs')
     , path      = require('path')
     , Sequelize = require('sequelize')

@@ -9,6 +9,8 @@ var multer = require('multer');
 var routes = require('./routes/index');
 var api_users = require('./routes/api/users');
 var api_experiences = require('./routes/api/experiences');
+var api_secrets = require('./routes/api/secrets');
+
 var auth = require('./routes/auth');
 
 var crypto = require('crypto');
@@ -64,6 +66,8 @@ app.use(multer({
 app.use('/', routes);
 app.use('/api/users', api_users);
 app.use('/api/experiences', api_experiences);
+app.use('/api/secrets', api_secrets);
+
 //app.use('/auth', auth);
 
 /// catch 404 and forward to error handler
