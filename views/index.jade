@@ -18,55 +18,45 @@ block content
         #headerText.row-fluid
             div.col-md-7.text-center
                 h1 Local
-
+                a(href="https://itunes.apple.com/ca/app/local/id893026643?mt=8&uo=4" target="itunes_store")
+                    img(src='/assets/app-store-logo.png')
     #aboutApp.container-fluid
         div.row-fluid.padding-bottom-10
-            div.col-md-6
+            div.col-md-6.padding-top-30
                 h1 What’s fun to do around here?
                 p Local is an iPhone app that gathers activities and experiences located around the user, displaying them ranked by popularity and satisfaction. It provides everything there is to do in your area, so that you never miss out on a fun experience again just because “No one told you.”
                 p Whether you’re a seasoned veteran, or a total newbie, Local helps you get past the hotel info desk and out into the real world, where the real fun is!
-        img.im(src='/assets/main_screen.png').col-md-offset-1.col-md-4.overlapUp.img-responsive
+        img.im(src='/assets/main_screen_mvp.png').col-md-offset-1.col-md-4.overlapUp.img-responsive
 
 
     #aboutApp.container-fluid
         div.dividerSplash
         div.row-fluid
-            img(src='/assets/detail_main.png').col-md-3.col-md-offset-1.padding-top-40.img-responsive
+            img(src='/assets/detail_main_mvp.png').col-md-3.col-md-offset-1.padding-top-40.img-responsive
             div.col-md-6.col-md-offset-1.padding-top-80
-                h1 Want to Learn More?
-                p Once an activity is selected, users will be able to flip through multiple pictures, and learn many other details about their trip. All communication is facilitated through Local, making it simple and easy to organize your trip directly with your host.
-                p Entrepreneurial locals and established businesses alike can create their own activities, set their own prices, communicate with customers, and be paid all directly through the app.
+                h1 Get the information you need to start your adveture
+                p We don't want you to waste any time in finding the perfect experience for you. That is why as soon as you select an activity we provide you with access to all the information you need to get out and explore your destination.
+                p Right away you can see a description and images to help you make your choice. Call and Email right from the app to inquire further and reserve your spot. Finally we also provide you with directions all the way to your next adventure.
 
     #aboutApp.container-fluid
         div.dividerSplash
         div.row-fluid
-            div.col-md-6.col-md-offset-1.padding-top-80
-                h1 Is this trip right for me?
-                p Our peer-review system allows users to comment and communicate with hosts, and each other. This provides real-world feedback, helping you discern between what is a “must-see” activity and what is a “maybe next time.” To add your own experiences of the activity, it’s as easy as typing in the comment box!
-            img(src='/assets/detail_review.png').col-md-3.col-md-offset-1.padding-top-40.img-responsive
+            div.col-md-5.padding-top-10
+                h1 The Future of Traveling
+                p Local is a small app with a big dream. We want to change the way people explore the world around them and are always pushing towards this goal. This app will always be under development as long as us at Local keep finding new ways to provide value to the adventurers of the world.
+                p As we push forward we are already looking ahead at a long list of features we'd like to implement:
+                    ul
+                        li Local Secrets
+                        li Peer reviews of activities
+                        li In App Messaging
+                        li Local Guides
+                        li Online Booking
 
+                p If you want to keep updated on our progress towards our goals subscribe to our mailing list and don't worry we promise to never spam you.
 
-    #footer.container-fluid.margin-top-20
-        div.row-fluid
-            .col-md-4.col-md-offset-1
-                div#launchCopy
-                    h1 Subscribe!
-                    h2 to our mailing list and get notified when we launch!
-
-                div#socialShare
-                    | <div id="fb-root"></div>
-                    | <script>(function(d, s, id) {
-                    | var js, fjs = d.getElementsByTagName(s)[0];
-                    | if (d.getElementById(id)) return;
-                    | js = d.createElement(s); js.id = id;
-                    | js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=678994002189613&version=v2.0";
-                    | fjs.parentNode.insertBefore(js, fjs);
-                    | }(document, 'script', 'facebook-jssdk'));</script>
-                    | <div class="fb-like" data-href="http://local-app.co" data-layout="button" data-action="like" data-show-faces="false" data-share="true"></div>
-                    | <a href="https://twitter.com/intent/tweet?screen_name=localsgo&text=Check%20out%20the%20guys%20at%20Local!%20Changing%20the%20way%20I%20travel%20for%20sure" class="twitter-mention-button">Tweet to @localsgo</a>
-                    | <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-
-            #mc_embed_signup.col-md-4.col-md-offset-1.padding-top-30
+            div.col-md-5.col-md-offset-1.padding-top-100
+                img(src='/assets/our_vision.png').img-responsive.row-fluid.col-md-12
+                #mc_embed_signup.row-fluid.col-md-12.padding-top-40
                 form#mc-embedded-subscribe-form.form-horizontal.validate(action='//local-app.us9.list-manage.com/subscribe/post?u=4a7932d8a24f32cb4eeb983b3&id=1a9a37b118', method='post', name='mc-embedded-subscribe-form', target='_blank', novalidate='novalidate')
                     .mc-field-group.form-group.margin-left-0
                         label.control-label(for='mce-EMAIL') Email Address
@@ -80,6 +70,34 @@ block content
                         input#mc-embedded-subscribe.btn.btn-default.button(type='submit', value='Subscribe', name='subscribe')
 
 
-                img(src='/assets/socialBanner.png').padding-top-30.img-responsive
+
+    #footer.container-fluid.margin-top-20
+        div.row-fluid
+            div#launchCopy.col-md-2
+                h1 Contact Us
+            div.col-md-10.padding-top-15
+                div.col-md-3.padding-top-10
+                    p <span class="glyphicon glyphicon-envelope"></span> hello@local-app.co
+                div.col-md-2.padding-top-10
+                    p <span class="glyphicon glyphicon-camera"></span> @local_pics
+                div.col-md-2.padding-top-10
+                    p <span class="label label-default label-custom">twitter</span> @localsgo
+                div.col-md-2.padding-top-10
+                    p <span class="label label-default label-custom">snapchat</span> l.ocal
+
+                div#socialShare.col-md-3
+                    | <div id="fb-root"></div>
+                    | <script>(function(d, s, id) {
+                    | var js, fjs = d.getElementsByTagName(s)[0];
+                    | if (d.getElementById(id)) return;
+                    | js = d.createElement(s); js.id = id;
+                    | js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=678994002189613&version=v2.0";
+                    | fjs.parentNode.insertBefore(js, fjs);
+                    | }(document, 'script', 'facebook-jssdk'));</script>
+                    | <div class="fb-like" data-href="http://local-app.co" data-layout="button" data-action="like" data-show-faces="false" data-share="true"></div>
+                    | <a href="https://twitter.com/intent/tweet?screen_name=localsgo&text=Check%20out%20the%20guys%20at%20Local!%20Changing%20the%20way%20I%20travel%20for%20sure" class="twitter-mention-button">Tweet to @localsgo</a>
+                    | <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+            //img(src='/assets/socialBanner.png').col-md-4.padding-top-30.img-responsive
 
 
